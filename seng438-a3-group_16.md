@@ -2,7 +2,7 @@
 
 **Lab. Report #3 – Code Coverage, Adequacy Criteria and Test Case Correlation**
 
-| Group \#:      |     |
+| Group \#: 16   |     |
 | -------------- | --- |
 | Student Names: |     |
 |                |     |
@@ -34,7 +34,11 @@ Text…
 
 # 6 Pros and Cons of coverage tools used and Metrics you report
 
-Text…
+In our assignment, we used EclEmma as our code coverage tool. It was selected because of its smooth Eclipse integration, which makes it simple to use and set up. Although EclEmma did not offer condition coverage, it did enable us to measure statement, branch, and method coverage. Its visual feedback technique, which displayed uncovered code in red and covered code in green, was one of its most helpful features. Because of this, it was simpler to find areas where our test coverage was lacking and adjust our unit tests appropriately. We were also able to keep the majority of our initial tests while performing white-box testing to increase coverage because EclEmma was compatible with mock objects.
+
+However, EclEmma had some limitations. One major drawback was that it did not support condition coverage, which would have allowed us to analyze individual Boolean subconditions within decision statements. Additionally, the tool did not account for dead or unreachable code, which affected our overall coverage percentage. For example, in the DataUtilities class, our statement coverage was 89.6% instead of reaching 90% because EclEmma still considered logically unreachable code in its calculations.
+
+In terms of reported metrics, we primarily focused on statement coverage (percentage of executed statements), branch coverage (percentage of executed control flow branches), and method coverage (percentage of methods executed at least once). These metrics helped us assess test effectiveness and guided improvements in our testing approach. Despite its limitations, EclEmma was a valuable tool for evaluating and improving our test coverage.
 
 # 7 A comparison on the advantages and disadvantages of requirements-based test generation and coverage-based test generation.
 
