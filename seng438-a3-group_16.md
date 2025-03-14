@@ -4,21 +4,68 @@
 
 | Group \#: 16   |     |
 | -------------- | --- |
-| Student Names: |     |
-|                |     |
-|                |     |
-|                |     |
+| Student Names: | Sahib Singh Thethi |
+|                | Sukriti Badhwar |
+|                | Wade Banman |
+|                | Rohan Lange |
 
 (Note that some labs require individual reports while others require one report
 for each group. Please see each lab document for details.)
 
 # 1 Introduction
 
-Text…
+With a focus on code coverage as a gauge of test suite adequacy, our team's third assignment aimed to improve our comprehension and use of white-box testing methodologies. Using control-flow and data-flow coverage criteria, this assignment changed our methodology from requirements-based test generation to coverage-based test generation, building on the unit testing abilities we acquired in Assignment 2. As our System Under Test (SUT), we used the open-source Java charting package JFreeChart framework, focusing on the org.jfree.data.DataUtilities and org.jfree.data.Range classes. EclEmma, which was incorporated into Eclipse, served as our main instrument for evaluating control-flow coverage. It enabled us to evaluate the statement, branch, and method coverage of our test suite. Through this process, we improved our comprehension of the relationship between coverage metrics and test effectiveness while investigating the usefulness, drawbacks, and practical implementation of coverage tools. This report highlights our team's efforts to enhance the JFreeChart test suite and assess the trade-offs between various testing methodologies. It also describes our approach, results, and views on the process.
 
 # 2 Manual data-flow coverage calculations for X and Y methods
 
-Text…
+## **DataUtilities Class - calculateColumnTotal()**
+
+<img src="media/DFG-of-calculateColumnTotal.jpg"  width="360"/>
+
+**Def-Use Sets:**
+
+|  **Node** |    **Def**   |       **Use**       |
+|-----------|--------------|---------------------|
+|   1       | data, column |          -          |
+|   2       |       -      |         data        |
+|   3       |     total    |          -          |
+|   4       |   rowCount   |         data        |
+|   5       |       r      |     r, rowCount     |
+|   6       |       n      |  data, r, column, n |
+|   7       |     total    |       total, n      |
+|   8       |       -      |          r          |
+|   9       |      r2      |     r2, rowCount    |
+|  10       |       n      | data, r2, column, n |
+|  11       |     total    |       total, n      |
+|  12       |       -      |          r2         |
+|  13       |       -      |        total        |
+
+**DU-pairs:**
+
+| **Variable** |                                 **DU Pair**                                |
+|----------|------------------------------------------------------------------------|
+| data     | (1,2), (1,4), (1,6), (1,10)                                            |
+| column   | (1, 6), (1,10)                                                         |
+| total    | (3, 7), (7, 11), (11, 13), (3, 11), (7, 13), (3, 13), (7, 7), (11, 11) |
+| rowCount | (4, 5), (4, 9)                                                         |
+| r        | (5, 5), (5, 6), (5, 8)                                                 |
+| r2       | (9, 9), (9, 10), (9, 12)                                               |
+| n        | (6, 6), (6, 7), (10, 10), (10, 11)                                     |
+
+**Test Cases Coverage:**
+
+|                   Test Cases                   |                                                                                            Pairs Covered                                                                                            |
+|:----------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| calculateColumnTotalForMultipleRows()          | (1, 2), (1, 4), (1, 6), (1, 10), (1, 6), (1, 10), (3, 7), (7, 11), (11, 13), (7, 7), (11, 11), (4, 5), (4, 9), (5, 5), (5, 6), (5, 8), (9, 9), (9, 10), (9, 12), (6, 6), (6, 7), (10, 10), (10, 11) |
+| calculateColumnTotalForSingleRowSingleColumn() | (1, 2), (1, 4), (1, 6), (1, 10), (1, 6), (1, 10), (3, 7), (7, 11), (11, 13), (7, 7), (11, 11), (4, 5), (4, 9), (5, 5), (5, 6), (5, 8), (9, 9), (9, 10), (9, 12), (6, 6), (6, 7), (10, 10), (10, 11) |
+| calculateColumnTotalForNegativeValues()        | (1, 2), (1, 4), (1, 6), (1, 10), (1, 6), (1, 10), (3, 7), (7, 11), (11, 13), (7, 7), (11, 11), (4, 5), (4, 9), (5, 5), (5, 6), (5, 8), (9, 9), (9, 10), (9, 12), (6, 6), (6, 7), (10, 10), (10, 11) |
+| calculateColumnTotalForNullValue()             | (1, 2), (1, 4), (1, 6), (1, 10), (1, 6), (1, 10), (3, 7), (7, 11), (11, 13), (7, 7), (11, 11), (4, 5), (4, 9), (5, 5), (5, 6), (5, 8), (9, 9), (9, 10), (9, 12), (6, 6), (6, 7), (10, 10), (10, 11) |
+| calculateColumnTotalForEmptyTable()            | (1, 2), (1, 4), (3, 13), (4, 5), (4, 9), (5, 5), (9, 9)                                                                                                                                             |
+| calculateColumnTotalForNullData()              | (1, 2)                                                                                                                                                                                              |
+| calculateColumnTotalForColumnOutOfBounds()     | (1, 2), (1, 4), (3, 13), (4, 5), (4, 9), (5, 5), (9, 9)                                                                                                                                             |
+| calculateColumnTotalForNegativeColumnIndex()   | (1, 2), (1, 4), (3, 13), (4, 5), (4, 9), (5, 5), (9, 9)                                                                                                                                             |
+
+DU pair coverage = (Covered DU-pairs) / (Total DU-pairs) = (24 / 26) x 100 = 92.31%
 
 # 3 A detailed description of the testing strategy for the new unit test
 
@@ -50,8 +97,8 @@ Text…
 
 # 9 Any difficulties encountered, challenges overcome, and lessons learned from performing the lab
 
-Text…
+Our team faced a some difficulties during this assignment that put our technical proficiency and collaboration to the test. Integrating EclEmma with our Eclipse setup and making sure it functioned flawlessly with our current test suite from Assignment 2 was a major challenge. At first, we had problems when building the system's packages, which led to problems when utilizing EclEmma. In order to get around this, we looked at compatibility problems for a while before deciding to re-run the Eclipse setup and make sure that every step is done correctly while installing the right libraries and building new packages. We learned from this how crucial it is to check tool compatibility early on and modify our strategy as necessary. Calculating data-flow coverage by hand for the DataUtilities.calculateColumnTotal function presented another difficulty. Because calculateColumnTotal()'s control flow is so intricate, manually tracking DU-pairs was laborious and prone to mistakes. In order to solve this, we divided the assignment into manageable chunks, which increased precision and strengthened our comprehension of data-flow principles. This experience made clear how time-consuming human analysis is and how beneficial automated tools are for larger systems. The limiting of coverage metrics as the only measure of test quality was one of the most important lessons learnt.  Although reaching the desired coverage was a clear objective, we discovered that high coverage was not always effective in identifying flaws, particularly in edge cases that were hidden by inaccessible code.
 
 # 10 Comments/feedback on the lab itself
 
-Text…
+Building successfully on the groundwork established in Assignment 2, Assignment 3 offered a priceless chance to expand our knowledge of white-box testing and code coverage.  The work was both difficult and gratifying because of the practical viewpoint that the manual computation of data-flow coverage and the hands-on experience with tools like EclEmma provided.  Our efforts were guided by the assignment's well-defined framework, which included tool familiarization, coverage measurement, and test suite development. Overall, the assignment was well-designed to meet its learning objectives, fostering both technical proficiency and critical thinking.
