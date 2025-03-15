@@ -666,8 +666,92 @@ public class DataUtilitiesTest extends DataUtilities {
 	        assertEquals("The cumulative percentage for the second key should be 0.5", 0.5, result.getValue(1));
 	        assertEquals("The cumulative percentage for the third key should be 1.0", 1.0, result.getValue(2));
 	    }
+
+// Additional tests to improve Coverage:
+
+	    @Test
+	    public void calculateColumnTotalWithValidRows() {
+	        Mockery mockingContext = new Mockery();
+	        final Values2D values = mockingContext.mock(Values2D.class);
+
+	        mockingContext.checking(new Expectations() {
+	            {
+	                one(values).getRowCount();
+	                will(returnValue(3));
+
+	                one(values).getValue(0, 0);
+	                will(returnValue(1.0));
+
+	                one(values).getValue(1, 0);
+	                will(returnValue(2.0));
+
+	                one(values).getValue(2, 0);
+	                will(returnValue(3.0));
+	            }
+	        });
+
+	        int[] validRows = {0, 1, 2};
+	        double result = DataUtilities.calculateColumnTotal(values, 0, validRows);
+
+	        assertEquals("Total should be 6.0", 6.0, result, .000000001d);
+	    }
 	    
-	    //New test case
+	    @Test
+	    public void calculateRowTotalWithValidAndInvalidColumns() {
+	        Mockery mockingContext = new Mockery();
+	        final Values2D values = mockingContext.mock(Values2D.class);
+
+	        mockingContext.checking(new Expectations() {
+	            {
+	                one(values).getColumnCount();
+	                will(returnValue(3));
+
+	                one(values).getValue(0, 0);
+	                will(returnValue(1.5));
+
+	                one(values).getValue(0, 1);
+	                will(returnValue(null));
+
+	                one(values).getValue(0, 2);
+	                will(returnValue(2.5));
+	            }
+	        });
+
+	        int[] validCols = {0, 1, 2};
+	        double result = DataUtilities.calculateRowTotal(values, 0, validCols);
+
+	        assertEquals("Total should be 4.0", 4.0, result, .000000001d);
+	    }
+
+	    @Test
+	    public void calculateRowTotalFullBranchCoverage() {
+	        Mockery mock = new Mockery();
+	        final Values2D values = mock.mock(Values2D.class);
+
+	        mock.checking(new Expectations() {
+	            {
+	                one(values).getColumnCount();
+	                will(returnValue(-1));
+
+	                one(values).getColumnCount();
+	                will(returnValue(3));
+
+	                one(values).getValue(0, 0);
+	                will(returnValue(1.5));
+
+	                one(values).getValue(0, 1);
+	                will(returnValue(null));
+
+	                one(values).getValue(0, 2);
+	                will(returnValue(2.5));
+	            }
+	        });
+
+	        int[] validCols = {0, 1, 2};
+	        double result1 = DataUtilities.calculateRowTotal(values, 0, validCols);
+	        assertEquals("Total should be 0 when colCount < 0", 0.0, result1, .000000001d);
+	    }
+	    
 	    @Test
 	    public void testGetCumulativePercentagesWithNullValues() {
 	        Mockery mockingContext = new Mockery();
